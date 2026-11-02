@@ -1,5 +1,7 @@
 import math
 
+# Исходные данные. Каталог фильмов
+
 movies = [
     {
         "title": "The Dune Chronicles",
@@ -97,7 +99,7 @@ def average_rating(movies):
 
 
 def catalog_age_stats(movies, current_year=2026):
-    """Возвращает возраст самого старого, нового и средний возраст фильмов."""
+    """Возвращает возраст старого, нового фильма и средний возраст."""
     if not movies:
         return (0, 0, 0)
 
@@ -142,9 +144,6 @@ def decade_label(year):
             return "старые"
 
 
-# Запуск программы
-
-
 # Этап 3. Циклы
 
 
@@ -184,14 +183,52 @@ def count_long_movies(movies, threshold=120):
     return count
 
 
+# Этап 4. Строки
+
+
+def normalize_title(title):
+    """Приводит каждое слово названия к формату Title Case."""
+    words = title.split()
+    normalized_words = []
+
+    for word in words:
+        normalized_word = word[0].upper() + word[1:].lower()
+        normalized_words.append(normalized_word)
+
+    return " ".join(normalized_words)
+
+
+def make_slug(title):
+    """Преобразует название фильма в строку для URL."""
+    normalized = normalize_title(title)
+    return normalized.lower().replace(" ", "-")
+
+
+def format_report_line(movie):
+    """Формирует строку отчёта с информацией о фильме."""
+    title = normalize_title(movie["title"])
+    year = movie["year"]
+    rating = movie["rating"]
+    duration = duration_in_hours(movie["duration_min"])
+    genres = ", ".join(sorted(movie["genres"]))
+
+    return f'"{title}" ({year}) — {rating}/10, {duration}, жанры: {genres}'
+
+
+# Запуск программы и проверка результатов
+
+
 if __name__ == "__main__":
+    # Проверка этапа 1
     print("Средний рейтинг:", average_rating(movies))
     print("Возраст фильмов:", catalog_age_stats(movies))
     print("Длительность 155 минут:", duration_in_hours(155))
 
-    print("Рейтинг 9.2:", rating_tier(9.2))
+    # Проверка этапа 2
+    print("\nРейтинг 9.2:", rating_tier(9.2))
     print("Фильм 2024 года:", decade_label(2024))
 
+    # Проверка этапа 3
     print("\nФильмы без жанра comedy:")
     print_non_comedy_movies(movies)
 
@@ -199,6 +236,12 @@ if __name__ == "__main__":
     find_first_masterpiece(movies)
 
     print("\nПроверка случая без шедевров:")
-    find_first_masterpiece([movie for movie in movies if movie["rating"] <= 9.0])
+    movies_without_masterpieces = [movie for movie in movies if movie["rating"] <= 9.0]
+    find_first_masterpiece(movies_without_masterpieces)
 
     print("\nКоличество фильмов длиннее 120 минут:", count_long_movies(movies))
+
+    # Проверка этапа 4
+    print("\nНормализация названия:", normalize_title("silent hours"))
+    print("Slug:", make_slug("The Quiet Algorithm"))
+    print("Строка отчёта:", format_report_line(movies[7]))
