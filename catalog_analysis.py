@@ -84,8 +84,11 @@ movies = [
 ]
 
 
+# Этап 1. Переменные, числа и модуль math
+
+
 def average_rating(movies):
-    """Возвращает средний рейтинг фильмов."""
+    """Возвращает средний рейтинг фильмов, округлённый до одного знака."""
     if not movies:
         return 0.0
 
@@ -94,7 +97,7 @@ def average_rating(movies):
 
 
 def catalog_age_stats(movies, current_year=2026):
-    """Возвращает минимальный, максимальный и средний возраст фильмов."""
+    """Возвращает возраст самого старого, нового и средний возраст фильмов."""
     if not movies:
         return (0, 0, 0)
 
@@ -108,14 +111,44 @@ def catalog_age_stats(movies, current_year=2026):
 
 
 def duration_in_hours(minutes):
-    """Переводит продолжительность фильма в часы и минуты."""
+    """Переводит продолжительность фильма из минут в часы и минуты."""
     hours = minutes // 60
     remaining_minutes = minutes % 60
 
     return f"{hours}ч {remaining_minutes}м"
 
 
+# Этап 2. Условия и оператор match
+
+
+def rating_tier(rating):
+    """Определяет категорию фильма по рейтингу."""
+    if rating >= 9:
+        return "шедевр"
+    elif rating >= 7:
+        return "хорошо"
+    else:
+        return "средне" if rating >= 5 else "слабо"
+
+
+def decade_label(year):
+    """Определяет категорию фильма по году выпуска."""
+    match year:
+        case _ if year > 2020:
+            return "новые"
+        case _ if 2015 <= year <= 2020:
+            return "недавние"
+        case _:
+            return "старые"
+
+
+# Запуск программы
+
+
 if __name__ == "__main__":
     print("Средний рейтинг:", average_rating(movies))
     print("Возраст фильмов:", catalog_age_stats(movies))
     print("Длительность 155 минут:", duration_in_hours(155))
+
+    print("Рейтинг 9.2:", rating_tier(9.2))
+    print("Фильм 2024 года:", decade_label(2024))
