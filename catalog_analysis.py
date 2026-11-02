@@ -145,6 +145,45 @@ def decade_label(year):
 # Запуск программы
 
 
+# Этап 3. Циклы
+
+
+def print_non_comedy_movies(movies):
+    """Выводит названия фильмов, не относящихся к комедиям."""
+    for movie in movies:
+        if "comedy" in movie["genres"]:
+            continue
+
+        print(movie["title"])
+
+
+def find_first_masterpiece(movies):
+    """Находит первый фильм с рейтингом выше 9.0."""
+    index = 0
+
+    while index < len(movies):
+        movie = movies[index]
+
+        if movie["rating"] > 9.0:
+            print("Первый шедевр:", movie["title"])
+            break
+
+        index += 1
+    else:
+        print("Шедевров не найдено")
+
+
+def count_long_movies(movies, threshold=120):
+    """Считает количество фильмов длиннее заданного порога."""
+    count = 0
+
+    for movie in movies:
+        if movie["duration_min"] > threshold:
+            count += 1
+
+    return count
+
+
 if __name__ == "__main__":
     print("Средний рейтинг:", average_rating(movies))
     print("Возраст фильмов:", catalog_age_stats(movies))
@@ -152,3 +191,14 @@ if __name__ == "__main__":
 
     print("Рейтинг 9.2:", rating_tier(9.2))
     print("Фильм 2024 года:", decade_label(2024))
+
+    print("\nФильмы без жанра comedy:")
+    print_non_comedy_movies(movies)
+
+    print("\nПоиск первого шедевра:")
+    find_first_masterpiece(movies)
+
+    print("\nПроверка случая без шедевров:")
+    find_first_masterpiece([movie for movie in movies if movie["rating"] <= 9.0])
+
+    print("\nКоличество фильмов длиннее 120 минут:", count_long_movies(movies))
