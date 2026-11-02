@@ -306,7 +306,17 @@ def genres_only_in_one(movies_a, movies_b):
     return genres_a - genres_b
 
 
-# Запуск программы и проверка этапов 1–7
+# Этап 8. Итераторы и генераторы
+
+
+def iter_high_rated(movies, min_rating=8.0):
+    """Последовательно выдаёт фильмы с рейтингом не ниже заданного."""
+    for movie in movies:
+        if movie["rating"] >= min_rating:
+            yield movie
+
+
+# Запуск программы и проверка этапов 1–8
 
 
 if __name__ == "__main__":
@@ -366,3 +376,15 @@ if __name__ == "__main__":
 
     print("\nЖанры только из первой группы:")
     print(genres_only_in_one(movies[5:6], movies[:5]))
+
+    # Этап 8
+    print("\nФильмы с рейтингом не ниже 8.0:")
+    for movie in iter_high_rated(movies):
+        print(format_report_line(movie))
+
+    total_duration = sum(
+        movie["duration_min"] for movie in movies if movie["rating"] > 7
+    )
+
+    print("\nОбщая продолжительность фильмов с рейтингом выше 7:")
+    print(f"{total_duration} минут")
